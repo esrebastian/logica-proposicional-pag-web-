@@ -1,0 +1,1 @@
+const b=document.querySelector('#creditsButton'),p=document.querySelector('#creditsPanel'),c=document.querySelector('#closeCredits');if(b){const t=o=>{p.hidden=!o;b.setAttribute('aria-expanded',o)};b.onclick=()=>t(p.hidden);c.onclick=()=>t(false);document.onkeydown=e=>{if(e.key==='Escape')t(false)}}
