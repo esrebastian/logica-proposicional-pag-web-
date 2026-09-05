@@ -56,10 +56,23 @@ function variables(node, set = new Set()) { if (node.type === 'var') set.add(nod
 function source(node) { if (node.type === 'var') return node.name; if (node.type === 'not') return `¬${node.child.type === 'var' ? source(node.child) : `(${source(node.child)})`}`; return `(${source(node.left)} ${node.op} ${source(node.right)})`; }
 function evaluate(node, values, steps) {
   if (node.type === 'var') return values[node.name];
-  if (node.type === 'not') { const value = !evaluate(node.child, values, steps); if (steps) steps.push(`${display(node.child, values)}  →  ${truth(value)}`); return value; }
+  if (node.type === 'not') {
+    const child = evaluate(node.child, values, steps), value = !child;
+    if (steps) steps.push({ operation: `¬${truth(child)} = ${truth(value)}`, explanation: `La negación cambia el valor de verdad: ¬${truth(child)} da ${truth(value)}.` });
+    return value;
+  }
   const left = evaluate(node.left, values, steps), right = evaluate(node.right, values, steps);
   const value = node.op === '∧' ? left && right : node.op === '∨' ? left || right : node.op === '⊕' ? left !== right : node.op === '→' ? !left || right : left === right;
-  if (steps) steps.push(`${display(node.left, values)} ${node.op} ${display(node.right, values)}  →  ${truth(value)}`);
+  if (steps) {
+    const explanations = {
+      '∧': value ? 'La conjunción es verdadera porque ambas proposiciones son verdaderas.' : 'La conjunción es falsa porque no ambas proposiciones son verdaderas.',
+      '∨': value ? 'La disyunción es verdadera porque al menos una proposición es verdadera.' : 'La disyunción es falsa porque ambas proposiciones son falsas.',
+      '⊕': value ? 'La disyunción fuerte es verdadera porque exactamente una proposición es verdadera.' : 'La disyunción fuerte es falsa porque ambas proposiciones tienen el mismo valor.',
+      '→': value ? (left ? 'La implicación es verdadera porque se cumplen la condición y la consecuencia.' : 'La implicación es verdadera porque la condición inicial es falsa.') : 'La implicación es falsa porque la condición es verdadera y la consecuencia es falsa.',
+      '↔': value ? 'La equivalencia es verdadera porque ambas proposiciones tienen el mismo valor.' : 'La equivalencia es falsa porque las proposiciones tienen valores distintos.'
+    };
+    steps.push({ operation: `${truth(left)} ${node.op} ${truth(right)} = ${truth(value)}`, explanation: explanations[node.op] });
+  }
   return value;
 }
 function display(node, values) { if (node.type === 'var') return truth(values[node.name]); if (node.type === 'not') return `¬${node.child.type === 'var' ? display(node.child, values) : `(${display(node.child, values)})`}`; return `(${display(node.left, values)} ${node.op} ${display(node.right, values)})`; }
@@ -72,7 +85,7 @@ function renderSolution() {
     const selected = rows[0], steps = [], result = evaluate(tree, selected, steps);
     $('#resultValue').textContent = truth(result);
     $('#valuesBar').innerHTML = vars.map(name => `<span><b>${name}</b> = ${truth(selected[name])}</span>`).join('');
-    $('#procedure').innerHTML = [`<div class="step expression-step"><span>Expresión</span><b>${display(tree, selected)}</b></div>`, ...steps.map((step, index) => `<div class="step"><span>${index + 1}</span><b>${step}</b></div>`), `<div class="step final-step"><span>Final</span><b>${source(tree)} = ${truth(result)}</b></div>`].join('');
+    $('#procedure').innerHTML = [`<div class="step expression-step"><span>Sustitución</span><div><b>${display(tree, selected)}</b><small>Reemplazamos cada proposición por su valor de verdad.</small></div></div>`, ...steps.map((step, index) => `<div class="step"><span>Paso ${index + 1}</span><div><b>${step.operation}</b><small>${step.explanation}</small></div></div>`), `<div class="step final-step"><span>Resultado</span><div><b>${source(tree)} = ${truth(result)}</b><small>El valor final de la expresión es ${truth(result)} (${result ? 'verdadero' : 'falso'}).</small></div></div>`].join('');
     $('#tableDescription').textContent = `Se evalúan las ${2 ** vars.length} combinaciones posibles de ${vars.join(', ')}.`;
     $('#rowCount').textContent = `${2 ** vars.length} filas`;
     $('#truthTable').innerHTML = `<table class="truth-table"><thead><tr>${vars.map(name => `<th>${name}</th>`).join('')}<th>${source(tree)}</th></tr></thead><tbody>${rows.map(values => `<tr>${vars.map(name => `<td>${truth(values[name])}</td>`).join('')}<td>${truth(evaluate(tree, values))}</td></tr>`).join('')}</tbody></table>`;
