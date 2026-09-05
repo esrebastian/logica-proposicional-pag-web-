@@ -1,4 +1,5 @@
 const $ = (selector) => document.querySelector(selector);
+if (!document.querySelector('#creditsLoader')) { const loader=document.createElement('script'); loader.id='creditsLoader'; loader.src='credits.js'; document.head.append(loader); }
 const truth = value => value ? 'V' : 'F';
 
 document.querySelectorAll('[data-practice]').forEach(button => button.addEventListener('click', () => {
