@@ -1,1 +1,347 @@
-<!doctype html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Aprender | Lógica Clara</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet"><link rel="stylesheet" href="styles.css"></head><body><header class="topbar"><a class="brand" href="index.html"><span class="brand-mark">∴</span>Lógica<span>Clara</span></a><nav><a href="index.html">Inicio</a><a class="active" href="aprender.html">Aprender</a><a href="practicar.html">Practicar</a><a href="calculadora.html">Calculadora</a></nav><button class="profile">S</button></header><main class="learn-page"><section class="learn-hero"><p class="eyebrow"><i></i> Guía de referencia</p><h1>Aprende lógica <em>paso a paso.</em></h1><p>Desde las proposiciones hasta las aplicaciones prácticas: símbolos, reglas, ejemplos y tablas de verdad en un solo lugar.</p><div class="learn-nav"><a href="#proposiciones">Proposiciones</a><a href="#operadores">Operadores</a><a href="#ejemplos">Ejemplos</a><a href="#usos">Usos</a></div></section><section id="proposiciones" class="learn-section"><div class="learn-title"><p class="eyebrow">01 · Proposiciones</p><h2>Afirmaciones que pueden ser V o F.</h2><p>Una proposición es una oración declarativa con un valor de verdad. Las letras p, q, r, s y t se usan para representarlas.</p></div><div class="variable-grid"><article><b>p</b><span>Primera proposición</span><p>“Estudio para el examen”.</p></article><article><b>q</b><span>Segunda proposición</span><p>“Apruebo la materia”.</p></article><article><b>r</b><span>Tercera proposición</span><p>“Asisto a clase”.</p></article><article><b>s</b><span>Cuarta proposición</span><p>Otra afirmación.</p></article><article><b>t</b><span>Quinta proposición</span><p>Otra afirmación.</p></article></div><div class="learn-note"><span>✦</span><p><b>No son proposiciones:</b> preguntas, órdenes o deseos. “¿Cuánto es 5 + 3?” y “¡Estudia!” no pueden ser V o F. “x + 2 = 5” depende de conocer x; si x = 3, entonces es V.</p></div></section><section id="operadores" class="learn-section operators-section"><div class="learn-title"><p class="eyebrow">02 · Operadores</p><h2>Reglas para unir ideas.</h2><p>Los conectores permiten crear proposiciones compuestas. Cada uno tiene una regla de verdad precisa.</p></div><div class="operator-lessons"><article><div class="operator-symbol">¬</div><div><h3>Negación · no</h3><p class="logic-example">¬p</p><p>Invierte el valor: si p es V, ¬p es F; si p es F, ¬p es V.</p></div><table><tr><th>p</th><th>¬p</th></tr><tr><td>V</td><td>F</td></tr><tr><td>F</td><td>V</td></tr></table></article><article><div class="operator-symbol">∧</div><div><h3>Conjunción · y</h3><p class="logic-example">p ∧ q</p><p>Solo es V si ambas proposiciones son V.</p></div><table><tr><th>VV</th><th>VF</th><th>FV</th><th>FF</th></tr><tr><td>V</td><td>F</td><td>F</td><td>F</td></tr></table></article><article><div class="operator-symbol">∨</div><div><h3>Disyunción débil · o</h3><p class="logic-example">p ∨ q</p><p>Es V si al menos una es V; solo es F en F,F.</p></div><table><tr><th>VV</th><th>VF</th><th>FV</th><th>FF</th></tr><tr><td>V</td><td>V</td><td>V</td><td>F</td></tr></table></article><article><div class="operator-symbol">⊕</div><div><h3>Disyunción fuerte · o…o</h3><p class="logic-example">p ⊕ q</p><p>Es V solo si una es V y la otra F.</p></div><table><tr><th>VV</th><th>VF</th><th>FV</th><th>FF</th></tr><tr><td>F</td><td>V</td><td>V</td><td>F</td></tr></table></article><article><div class="operator-symbol">→</div><div><h3>Implicación · si…entonces</h3><p class="logic-example">p → q</p><p>Solo es F cuando p es V y q es F.</p></div><table><tr><th>VV</th><th>VF</th><th>FV</th><th>FF</th></tr><tr><td>V</td><td>F</td><td>V</td><td>V</td></tr></table></article><article><div class="operator-symbol">↔</div><div><h3>Equivalencia · si y solo si</h3><p class="logic-example">p ↔ q</p><p>Es V cuando ambos valores coinciden.</p></div><table><tr><th>VV</th><th>VF</th><th>FV</th><th>FF</th></tr><tr><td>V</td><td>F</td><td>F</td><td>V</td></tr></table></article></div></section><section class="parenthesis-section"><div><p class="eyebrow">03 · Prioridad</p><h2>Los paréntesis indican qué resolver primero.</h2><p>Como en aritmética, se evalúa primero el contenido entre paréntesis. Luego se aplican los conectores.</p></div><div class="parenthesis-example"><p>Ejemplo</p><b>(p ∨ q) ∧ r</b><small>Primero se calcula p ∨ q; el resultado se une después con r.</small><p>Combinaciones</p><b>2ⁿ</b><small>Con 1 proposición hay 2 filas; con 2 hay 4; con 3 hay 8.</small></div></section><section id="ejemplos" class="learn-section examples-section"><div class="learn-title"><p class="eyebrow">04 · Ejemplos del material</p><h2>La lógica está en diferentes áreas.</h2><p>Todos estos enunciados pueden evaluarse.</p></div><div class="context-grid"><article><span>123</span><h3>Matemáticas</h3><p>“5 es primo” → <b>V</b></p><p>“2 + 3 = 6” → <b>F</b></p><p>“0 es entero” → <b>V</b></p></article><article><span>{ }</span><h3>Conjuntos</h3><p>“4 ∈ {1,2,3}” → <b>F</b></p><p>“Todo natural es entero” → <b>V</b></p></article><article><span>△</span><h3>Geometría</h3><p>“Un triángulo tiene 3 lados” → <b>V</b></p><p>“Un cuadrado tiene 5 ángulos” → <b>F</b></p></article><article><span>f(x)</span><h3>Aplicadas</h3><p>“x² crece para x ≥ 0” → <b>V</b></p><p>“−3 es mayor que −1” → <b>F</b></p></article></div></section><section id="usos" class="build-section"><div class="build-heading"><p class="eyebrow">05 · Vista gráfica y usos</p><h2>De condiciones a decisiones.</h2><p>Las proposiciones compuestas sirven para expresar reglas y alternativas con claridad.</p></div><div class="build-flow"><div><small>p</small><b>Usuario inicia sesión</b><span>V</span></div><i>→</i><div><small>q</small><b>Mostrar perfil</b><span>V</span></div><i>=</i><div class="flow-result"><small>p → q</small><b>Acceso permitido</b><span>V</span></div></div><div class="use-cases"><article><span>01</span><div><h3>Programación</h3><p>Si ocurre una condición, el sistema realiza una acción.</p><code>p → q</code></div></article><article><span>02</span><div><h3>Decisiones</h3><p>“Salgo si termino la tarea y no llueve”.</p><code>q ∧ ¬p</code></div></article><article><span>03</span><div><h3>Elección exclusiva</h3><p>“Parque o museo, pero no ambos”.</p><code>p ⊕ q</code></div></article></div></section><section class="activity-section"><p class="eyebrow">Actividad del material</p><h2>Construye tus propios casos.</h2><p>Escribe 10 proposiciones simples y 10 compuestas. Usa los conectores y comprueba sus resultados en la calculadora.</p><a class="button primary" href="calculadora.html">Abrir calculadora <b>→</b></a></section></main><footer><a class="brand" href="index.html"><span class="brand-mark">∴</span>Lógica<span>Clara</span></a><p>Aprende a razonar, una proposición a la vez.</p></footer></body></html>
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aprender | Lógica Clara</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="topbar">
+<a class="brand" href="index.html">
+<span class="brand-mark">∴</span>Lógica<span>Clara</span>
+</a>
+<nav>
+<a href="index.html">Inicio</a>
+<a class="active" href="aprender.html">Aprender</a>
+<a href="practicar.html">Practicar</a>
+<a href="calculadora.html">Calculadora</a>
+</nav>
+<button class="profile">S</button>
+</header>
+<main class="learn-page">
+<section class="learn-hero">
+<p class="eyebrow">
+<i>
+</i> Guía de referencia</p>
+<h1>Aprende lógica <em>paso a paso.</em>
+</h1>
+<p>Desde las proposiciones hasta las aplicaciones prácticas: símbolos, reglas, ejemplos y tablas de verdad en un solo lugar.</p>
+<div class="learn-nav">
+<a href="#proposiciones">Proposiciones</a>
+<a href="#operadores">Operadores</a>
+<a href="#ejemplos">Ejemplos</a>
+<a href="#usos">Usos</a>
+</div>
+</section>
+<section id="proposiciones" class="learn-section">
+<div class="learn-title">
+<p class="eyebrow">01 · Proposiciones</p>
+<h2>Afirmaciones que pueden ser V o F.</h2>
+<p>Una proposición es una oración declarativa con un valor de verdad. Las letras p, q, r, s y t se usan para representarlas.</p>
+</div>
+<div class="variable-grid">
+<article>
+<b>p</b>
+<span>Primera proposición</span>
+<p>“Estudio para el examen”.</p>
+</article>
+<article>
+<b>q</b>
+<span>Segunda proposición</span>
+<p>“Apruebo la materia”.</p>
+</article>
+<article>
+<b>r</b>
+<span>Tercera proposición</span>
+<p>“Asisto a clase”.</p>
+</article>
+<article>
+<b>s</b>
+<span>Cuarta proposición</span>
+<p>Otra afirmación.</p>
+</article>
+<article>
+<b>t</b>
+<span>Quinta proposición</span>
+<p>Otra afirmación.</p>
+</article>
+</div>
+<div class="learn-note">
+<span>✦</span>
+<p>
+<b>No son proposiciones:</b> preguntas, órdenes o deseos. “¿Cuánto es 5 + 3?” y “¡Estudia!” no pueden ser V o F. “x + 2 = 5” depende de conocer x; si x = 3, entonces es V.</p>
+</div>
+</section>
+<section id="operadores" class="learn-section operators-section">
+<div class="learn-title">
+<p class="eyebrow">02 · Operadores</p>
+<h2>Reglas para unir ideas.</h2>
+<p>Los conectores permiten crear proposiciones compuestas. Cada uno tiene una regla de verdad precisa.</p>
+</div>
+<div class="operator-lessons">
+<article>
+<div class="operator-symbol">¬</div>
+<div>
+<h3>Negación · no</h3>
+<p class="logic-example">¬p</p>
+<p>Invierte el valor: si p es V, ¬p es F; si p es F, ¬p es V.</p>
+</div>
+<table>
+<tr>
+<th>p</th>
+<th>¬p</th>
+</tr>
+<tr>
+<td>V</td>
+<td>F</td>
+</tr>
+<tr>
+<td>F</td>
+<td>V</td>
+</tr>
+</table>
+</article>
+<article>
+<div class="operator-symbol">∧</div>
+<div>
+<h3>Conjunción · y</h3>
+<p class="logic-example">p ∧ q</p>
+<p>Solo es V si ambas proposiciones son V.</p>
+</div>
+<table>
+<tr>
+<th>VV</th>
+<th>VF</th>
+<th>FV</th>
+<th>FF</th>
+</tr>
+<tr>
+<td>V</td>
+<td>F</td>
+<td>F</td>
+<td>F</td>
+</tr>
+</table>
+</article>
+<article>
+<div class="operator-symbol">∨</div>
+<div>
+<h3>Disyunción débil · o</h3>
+<p class="logic-example">p ∨ q</p>
+<p>Es V si al menos una es V; solo es F en F,F.</p>
+</div>
+<table>
+<tr>
+<th>VV</th>
+<th>VF</th>
+<th>FV</th>
+<th>FF</th>
+</tr>
+<tr>
+<td>V</td>
+<td>V</td>
+<td>V</td>
+<td>F</td>
+</tr>
+</table>
+</article>
+<article>
+<div class="operator-symbol">⊕</div>
+<div>
+<h3>Disyunción fuerte · o…o</h3>
+<p class="logic-example">p ⊕ q</p>
+<p>Es V solo si una es V y la otra F.</p>
+</div>
+<table>
+<tr>
+<th>VV</th>
+<th>VF</th>
+<th>FV</th>
+<th>FF</th>
+</tr>
+<tr>
+<td>F</td>
+<td>V</td>
+<td>V</td>
+<td>F</td>
+</tr>
+</table>
+</article>
+<article>
+<div class="operator-symbol">→</div>
+<div>
+<h3>Implicación · si…entonces</h3>
+<p class="logic-example">p → q</p>
+<p>Solo es F cuando p es V y q es F.</p>
+</div>
+<table>
+<tr>
+<th>VV</th>
+<th>VF</th>
+<th>FV</th>
+<th>FF</th>
+</tr>
+<tr>
+<td>V</td>
+<td>F</td>
+<td>V</td>
+<td>V</td>
+</tr>
+</table>
+</article>
+<article>
+<div class="operator-symbol">↔</div>
+<div>
+<h3>Equivalencia · si y solo si</h3>
+<p class="logic-example">p ↔ q</p>
+<p>Es V cuando ambos valores coinciden.</p>
+</div>
+<table>
+<tr>
+<th>VV</th>
+<th>VF</th>
+<th>FV</th>
+<th>FF</th>
+</tr>
+<tr>
+<td>V</td>
+<td>F</td>
+<td>F</td>
+<td>V</td>
+</tr>
+</table>
+</article>
+</div>
+</section>
+<section class="parenthesis-section">
+<div>
+<p class="eyebrow">03 · Prioridad</p>
+<h2>Los paréntesis indican qué resolver primero.</h2>
+<p>Como en aritmética, se evalúa primero el contenido entre paréntesis. Luego se aplican los conectores.</p>
+</div>
+<div class="parenthesis-example">
+<p>Ejemplo</p>
+<b>(p ∨ q) ∧ r</b>
+<small>Primero se calcula p ∨ q; el resultado se une después con r.</small>
+<p>Combinaciones</p>
+<b>2ⁿ</b>
+<small>Con 1 proposición hay 2 filas; con 2 hay 4; con 3 hay 8.</small>
+</div>
+</section>
+<section id="ejemplos" class="learn-section examples-section">
+<div class="learn-title">
+<p class="eyebrow">04 · Ejemplos del material</p>
+<h2>La lógica está en diferentes áreas.</h2>
+<p>Todos estos enunciados pueden evaluarse.</p>
+</div>
+<div class="context-grid">
+<article>
+<span>123</span>
+<h3>Matemáticas</h3>
+<p>“5 es primo” → <b>V</b>
+</p>
+<p>“2 + 3 = 6” → <b>F</b>
+</p>
+<p>“0 es entero” → <b>V</b>
+</p>
+</article>
+<article>
+<span>{ }</span>
+<h3>Conjuntos</h3>
+<p>“4 ∈ {1,2,3}” → <b>F</b>
+</p>
+<p>“Todo natural es entero” → <b>V</b>
+</p>
+</article>
+<article>
+<span>△</span>
+<h3>Geometría</h3>
+<p>“Un triángulo tiene 3 lados” → <b>V</b>
+</p>
+<p>“Un cuadrado tiene 5 ángulos” → <b>F</b>
+</p>
+</article>
+<article>
+<span>f(x)</span>
+<h3>Aplicadas</h3>
+<p>“x² crece para x ≥ 0” → <b>V</b>
+</p>
+<p>“−3 es mayor que −1” → <b>F</b>
+</p>
+</article>
+</div>
+</section>
+<section id="usos" class="build-section">
+<div class="build-heading">
+<p class="eyebrow">05 · Vista gráfica y usos</p>
+<h2>De condiciones a decisiones.</h2>
+<p>Las proposiciones compuestas sirven para expresar reglas y alternativas con claridad.</p>
+</div>
+<div class="build-flow">
+<div>
+<small>p</small>
+<b>Usuario inicia sesión</b>
+<span>V</span>
+</div>
+<i>→</i>
+<div>
+<small>q</small>
+<b>Mostrar perfil</b>
+<span>V</span>
+</div>
+<i>=</i>
+<div class="flow-result">
+<small>p → q</small>
+<b>Acceso permitido</b>
+<span>V</span>
+</div>
+</div>
+<div class="use-cases">
+<article>
+<span>01</span>
+<div>
+<h3>Programación</h3>
+<p>Si ocurre una condición, el sistema realiza una acción.</p>
+<code>p → q</code>
+</div>
+</article>
+<article>
+<span>02</span>
+<div>
+<h3>Decisiones</h3>
+<p>“Salgo si termino la tarea y no llueve”.</p>
+<code>q ∧ ¬p</code>
+</div>
+</article>
+<article>
+<span>03</span>
+<div>
+<h3>Elección exclusiva</h3>
+<p>“Parque o museo, pero no ambos”.</p>
+<code>p ⊕ q</code>
+</div>
+</article>
+</div>
+</section>
+<section class="activity-section">
+<p class="eyebrow">Actividad del material</p>
+<h2>Construye tus propios casos.</h2>
+<p>Escribe 10 proposiciones simples y 10 compuestas. Usa los conectores y comprueba sus resultados en la calculadora.</p>
+<a class="button primary" href="calculadora.html">Abrir calculadora <b>→</b>
+</a>
+</section>
+</main>
+<footer>
+<a class="brand" href="index.html">
+<span class="brand-mark">∴</span>Lógica<span>Clara</span>
+</a>
+<p>Aprende a razonar, una proposición a la vez.</p>
+</footer>
+<script src="credits.js"></script>
+</body>
+</html>
+
