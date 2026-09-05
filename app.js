@@ -54,6 +54,16 @@ function parse(text) {
 }
 function variables(node, set = new Set()) { if (node.type === 'var') set.add(node.name); if (node.child) variables(node.child, set); if (node.left) variables(node.left, set); if (node.right) variables(node.right, set); return [...set].sort(); }
 function source(node) { if (node.type === 'var') return node.name; if (node.type === 'not') return `¬${node.child.type === 'var' ? source(node.child) : `(${source(node.child)})`}`; return `(${source(node.left)} ${node.op} ${source(node.right)})`; }
+function operationNodes(node, list = [], seen = new Set()) {
+  if (node.child) operationNodes(node.child, list, seen);
+  if (node.left) operationNodes(node.left, list, seen);
+  if (node.right) operationNodes(node.right, list, seen);
+  if (node.type !== 'var') {
+    const label = source(node);
+    if (!seen.has(label)) { seen.add(label); list.push(node); }
+  }
+  return list;
+}
 function evaluate(node, values, steps) {
   if (node.type === 'var') return values[node.name];
   if (node.type === 'not') {
@@ -80,15 +90,15 @@ function display(node, values) { if (node.type === 'var') return truth(values[no
 function renderSolution() {
   const field = $('#expression'), error = $('.calc-error'), solution = $('#solution');
   try {
-    const tree = parse(field.value), vars = variables(tree);
+    const tree = parse(field.value), vars = variables(tree), operations = operationNodes(tree);
     const rows = Array.from({ length: 2 ** vars.length }, (_, index) => Object.fromEntries(vars.map((name, n) => [name, !(index & (1 << (vars.length - n - 1)))])));
     const selected = rows[0], steps = [], result = evaluate(tree, selected, steps);
     $('#resultValue').textContent = truth(result);
     $('#valuesBar').innerHTML = vars.map(name => `<span><b>${name}</b> = ${truth(selected[name])}</span>`).join('');
     $('#procedure').innerHTML = [`<div class="step expression-step"><span>Sustitución</span><div><b>${display(tree, selected)}</b><small>Reemplazamos cada proposición por su valor de verdad.</small></div></div>`, ...steps.map((step, index) => `<div class="step"><span>Paso ${index + 1}</span><div><b>${step.operation}</b><small>${step.explanation}</small></div></div>`), `<div class="step final-step"><span>Resultado</span><div><b>${source(tree)} = ${truth(result)}</b><small>El valor final de la expresión es ${truth(result)} (${result ? 'verdadero' : 'falso'}).</small></div></div>`].join('');
-    $('#tableDescription').textContent = `Se evalúan las ${2 ** vars.length} combinaciones posibles de ${vars.join(', ')}.`;
+    $('#tableDescription').textContent = `Se evalúan las ${2 ** vars.length} combinaciones posibles de ${vars.join(', ')} y cada operación intermedia.`;
     $('#rowCount').textContent = `${2 ** vars.length} filas`;
-    $('#truthTable').innerHTML = `<table class="truth-table"><thead><tr>${vars.map(name => `<th>${name}</th>`).join('')}<th>${source(tree)}</th></tr></thead><tbody>${rows.map(values => `<tr>${vars.map(name => `<td>${truth(values[name])}</td>`).join('')}<td>${truth(evaluate(tree, values))}</td></tr>`).join('')}</tbody></table>`;
+    $('#truthTable').innerHTML = `<table class="truth-table detailed-table"><thead><tr>${vars.map(name => `<th>${name}</th>`).join('')}${operations.map(node => `<th>${source(node)}</th>`).join('')}</tr></thead><tbody>${rows.map(values => `<tr>${vars.map(name => `<td>${truth(values[name])}</td>`).join('')}${operations.map(node => `<td>${truth(evaluate(node, values))}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
     error.textContent = ''; solution.hidden = false; solution.scrollIntoView({ behavior: 'smooth', block: 'start' });
   } catch (exception) { error.textContent = exception.message; solution.hidden = true; }
 }
@@ -127,3 +137,66 @@ if ($('#expression')) {
   $('#clear').addEventListener('click', () => { field.value = ''; $('#solution').hidden = true; $('.calc-error').textContent = ''; });
   $('#solve').addEventListener('click', renderSolution);
 }
+
+function setupRandomPractice() {
+  if (!$('#newRandom')) return;
+  const rules = {
+    '∧': [ (p, q) => p && q, value => value ? 'La conjunción es verdadera porque p y q son verdaderas.' : 'La conjunción es falsa porque al menos una de las proposiciones es falsa.' ],
+    '∨': [ (p, q) => p || q, value => value ? 'La disyunción es verdadera porque al menos una proposición es verdadera.' : 'La disyunción es falsa porque ambas proposiciones son falsas.' ],
+    '⊕': [ (p, q) => p !== q, value => value ? 'La disyunción fuerte es verdadera porque exactamente una proposición es verdadera.' : 'La disyunción fuerte es falsa porque p y q tienen el mismo valor.' ],
+    '→': [ (p, q) => !p || q, value => value ? 'La implicación es verdadera; solo sería falsa si p fuera V y q fuera F.' : 'La implicación es falsa porque p es V y q es F.' ],
+    '↔': [ (p, q) => p === q, value => value ? 'La equivalencia es verdadera porque p y q tienen el mismo valor.' : 'La equivalencia es falsa porque p y q tienen valores diferentes.' ]
+  };
+  const symbols = Object.keys(rules); let random, complete;
+  const create = () => { const symbol = symbols[Math.floor(Math.random() * symbols.length)], p = Math.random() < .5, q = Math.random() < .5, rule = rules[symbol]; return { symbol, p, q, result: rule[0](p, q), explain: rule[1] }; };
+  const message = item => `<b>p ${item.symbol} q = ${truth(item.p)} ${item.symbol} ${truth(item.q)} = ${truth(item.result)}</b><br>${item.explain(item.result)}`;
+  const renderRandom = () => {
+    random = create(); $('#randomFeedback').className = 'practice-feedback'; $('#randomFeedback').innerHTML = '';
+    $('#randomQuestion').innerHTML = `<p>Si <b>p = ${truth(random.p)}</b> y <b>q = ${truth(random.q)}</b>, ¿cuál es el valor de:</p><strong>p ${random.symbol} q</strong>`;
+    $('#randomOptions').innerHTML = '<button data-value="V">V &nbsp; Verdadero</button><button data-value="F">F &nbsp; Falso</button>';
+    $('#randomOptions').querySelectorAll('button').forEach(button => button.addEventListener('click', () => {
+      const correct = button.dataset.value === truth(random.result); $('#randomOptions').querySelectorAll('button').forEach(item => item.disabled = true);
+      button.classList.add(correct ? 'correct' : 'incorrect'); $('#randomOptions').querySelector(`[data-value="${truth(random.result)}"]`).classList.add('correct');
+      $('#randomFeedback').className = `practice-feedback ${correct ? 'good' : 'bad'}`; $('#randomFeedback').innerHTML = `<span>${correct ? '✓ ¡Correcto!' : '× Aún no.'}</span>${message(random)}`;
+    }));
+  };
+  const renderComplete = () => { complete = create(); $('#completeAnswer').value = ''; $('#completeFeedback').className = 'practice-feedback'; $('#completeFeedback').innerHTML = ''; $('#completeQuestion').innerHTML = `<p>Si <b>p = ${truth(complete.p)}</b> y <b>q = ${truth(complete.q)}</b>, completa:</p><strong>${truth(complete.p)} ${complete.symbol} ${truth(complete.q)} = ?</strong>`; };
+  $('#newRandom').addEventListener('click', renderRandom); $('#newComplete').addEventListener('click', renderComplete);
+  $('#checkComplete').addEventListener('click', () => { const response = $('#completeAnswer').value.trim().toUpperCase(), correct = response === truth(complete.result), feedback = $('#completeFeedback'); if (!['V', 'F'].includes(response)) { feedback.className = 'practice-feedback bad'; feedback.innerHTML = '<span>×</span> Escribe únicamente V o F.'; return; } feedback.className = `practice-feedback ${correct ? 'good' : 'bad'}`; feedback.innerHTML = `<span>${correct ? '✓ ¡Correcto!' : '× Aún no.'}</span>${message(complete)}`; });
+  $('#completeAnswer').addEventListener('input', event => { event.target.value = event.target.value.toUpperCase().replace(/[^VF]/g, ''); });
+  renderRandom(); renderComplete();
+}
+setupRandomPractice();
+
+function setupGuidedPractice() {
+  const card = document.querySelector('.practice-page .practice-card');
+  if (!card) return;
+  const exercises = [
+    { title: 'CONJUNCIÓN', p: true, q: false, operator: '∧', answer: false, why: 'Una conjunción solo es verdadera cuando p y q son verdaderas. Como q es F, V ∧ F = F.' },
+    { title: 'DISYUNCIÓN', p: false, q: true, operator: '∨', answer: true, why: 'Una disyunción es verdadera si al menos una proposición es verdadera. Aquí q es V, por eso F ∨ V = V.' },
+    { title: 'DISYUNCIÓN FUERTE', p: true, q: true, operator: '⊕', answer: false, why: 'La disyunción fuerte solo es verdadera cuando exactamente una proposición es verdadera. Como ambas son V, V ⊕ V = F.' },
+    { title: 'IMPLICACIÓN', p: true, q: false, operator: '→', answer: false, why: 'Una implicación solo es falsa cuando la condición es V y la consecuencia es F. Por eso V → F = F.' },
+    { title: 'EQUIVALENCIA', p: false, q: false, operator: '↔', answer: true, why: 'La equivalencia es verdadera cuando ambas proposiciones tienen el mismo valor. Como ambas son F, F ↔ F = V.' }
+  ];
+  let current = 0;
+  const answered = Array(exercises.length).fill(false);
+  const progressNumber = document.querySelector('.practice-page .progress b');
+  const progressFill = document.querySelector('.practice-page .progress i i');
+  const render = () => {
+    const item = exercises[current], result = truth(item.answer);
+    if (progressNumber) progressNumber.textContent = `${current + 1} de ${exercises.length}`;
+    if (progressFill) progressFill.style.width = `${((current + 1) / exercises.length) * 100}%`;
+    card.innerHTML = `<div class="exercise-top"><span class="practice-label">EJERCICIO ${current + 1} · ${item.title}</span><span class="exercise-count">${current + 1}/${exercises.length}</span></div><h3>Si p = ${truth(item.p)} y q = ${truth(item.q)},<br>¿p ${item.operator} q es…?</h3><div class="option-list guided-options"><button data-guided="V">V &nbsp; Verdadero</button><button data-guided="F">F &nbsp; Falso</button></div><div class="practice-feedback" aria-live="polite"></div><div class="exercise-navigation"><button id="previousExercise" ${current === 0 ? 'disabled' : ''}>← Anterior</button><button id="nextExercise" ${answered[current] ? '' : 'disabled'}>${current === exercises.length - 1 ? 'Volver al inicio' : 'Siguiente'} →</button></div>`;
+    card.querySelectorAll('[data-guided]').forEach(button => button.addEventListener('click', () => {
+      const correct = button.dataset.guided === result, feedback = card.querySelector('.practice-feedback');
+      card.querySelectorAll('[data-guided]').forEach(itemButton => itemButton.disabled = true);
+      answered[current] = true; card.querySelector('#nextExercise').disabled = false;
+      button.classList.add(correct ? 'correct' : 'incorrect'); card.querySelector(`[data-guided="${result}"]`).classList.add('correct');
+      feedback.className = `practice-feedback ${correct ? 'good' : 'bad'}`; feedback.innerHTML = `<span>${correct ? '✓ ¡Correcto!' : '× Aún no.'}</span><b>p ${item.operator} q = ${truth(item.p)} ${item.operator} ${truth(item.q)} = ${result}</b><br>${item.why}`;
+    }));
+    card.querySelector('#previousExercise').addEventListener('click', () => { if (current) { current--; render(); } });
+    card.querySelector('#nextExercise').addEventListener('click', () => { current = current === exercises.length - 1 ? 0 : current + 1; render(); });
+  };
+  render();
+}
+setupGuidedPractice();
